@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Web.WebPages.OAuth;
-using Materials.Web.Models;
-
-namespace Materials.Web
+﻿namespace Materials.Web
 {
     public static class AuthConfig
     {
