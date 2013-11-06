@@ -1,0 +1,147 @@
+﻿@model List<Materials.Web.Models.ProductModel>
+@{
+    ViewBag.Title = "Listado de Productos";    
+}
+
+<div>
+  <img src="~/Images/advertise_here.png" />
+  <br />
+</div>
+
+<hgroup class="title">
+    <h1>@ViewBag.Message</h1>
+</hgroup>
+   <fieldset> 
+   <legend> Búsqueda de productos </legend>
+    <table id="tbSearch">
+        <tr>
+            <td>
+                Buscar
+            </td>
+            <td>
+                 @*@Html.EditorFor(model => model., new { @title = "Ingrese el criterio de búsqueda", @class="searchTextField",  @id = "txtSearch" })*@                
+            </td>
+            <td>
+                <input id="search" type="button" value="Buscar" />
+            </td>
+            <td>
+                <h3 id="expanderHead" style="cursor:pointer;">Búsqueda Avanzada<span id="expanderSign">+</span>
+                </h3>
+                <div id="expanderContent" style="display:none">
+                     Short description about the story
+                 </div>  
+            </td>
+        </tr>
+        <tr>
+           <td colspan="4">
+                <table id="searchview">
+                </table>
+                <div id="search_viewPager"></div>
+            </td>
+        </tr> 
+        <tr>
+            <td colspan="4">
+              <table>
+                <tr>
+                    <td>
+                        <img width="257" height="120" src="~/Images/home.jpg" />
+                    </td>
+                    <td>
+                        <img width="257" height="120" src="~/Images/home.jpg" />
+                    </td>
+                    <td>
+                        <img width="257" height="120" src="~/Images/home.jpg" />
+                    </td>
+                </tr>
+            </table>
+            </td>
+        </tr>
+    </table>
+  </fieldset> 
+
+<br />
+
+<table>
+    <thead><tr><th>Name</th><th>Description</th></tr></thead>
+    <tbody data-bind="foreach: products">
+        <tr>
+            <td >
+                <input data-bind="value: productId" />
+            </td>
+            <td >
+                <input data-bind="value: productName" />
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<button data-bind="click: save">Guardar</button>
+
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $("#searchview").jqGrid({
+                url: '@Url.Action("ProductSearchQueryResult", "Home")',
+                mtype: "POST",
+                datatype: 'json',
+            colNames: ['ProductId', 'Logo', 'ProductName', 'File', 'Program'],
+            colModel: [
+                { name: 'ProductId', index: 'ProductId', editable: false, editrules: { edithidden: true } },
+                { name: 'Logo', editable: true },
+                { name: 'ProductName', editable: true },
+                { name: 'File', editable: true },
+                { name: 'Program', editable: true }
+            ],
+            pager: '#search_viewPager',
+            rowNum: 10,
+            gridview: true,
+            viewrecords: true,
+            sortname: 'ProductId',
+            pagerpos: 'center',
+            caption: "Resultado de la búsqueda"
+        });
+
+        $("#searchview").jqGrid('navGrid', '#search_viewPager',
+            {
+                // Navigation buttons appearance
+                add: false,
+                edit: false,
+                del: false,
+                search: false,
+                refresh: false
+            }
+        );
+    });
+</script>
+
+    <script type="text/javascript">
+
+        function Product(data) {
+            var self = this;
+            self.productId = ko.observable(data.ProductId);
+            self.productName = ko.observable(data.ProductName);
+        }
+
+        function ProductsViewModel() {
+            var self = this;
+            self.products = ko.observableArray([]);
+            self.save = function () {
+                $.ajax('@Url.Action("SaveProducts")', {
+                    data: ko.toJSON({ products: self.products }),
+                    type: "post", contentType: "application/json",
+                    success: function (result) { alert(result); }
+                });
+            };
+
+            //Load Data from server            
+            $.getJSON('@Url.Action("ProductSearchQueryResult")', function (allData) {
+                var mappedProducts = $.map(allData, function (item) { return new Product(item); });
+                self.products(mappedProducts);
+            });
+        }
+
+        ko.applyBindings(new ProductsViewModel());
+    </script>
+}

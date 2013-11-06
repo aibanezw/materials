@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Materials.Web.Models;
 
 namespace Materials.Web.Controllers
 {
@@ -10,23 +11,75 @@ namespace Materials.Web.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
+            ViewBag.Message = "Bienvenidos al portal Materiales";
 
             return View();
         }
 
-        public ActionResult About()
+        [HttpGet]
+        public ActionResult Product()
         {
-            ViewBag.Message = "Your app description page.";
+            ViewBag.Message = "Catálogo de Productos";
+
+            return View();
+        }
+
+        public ActionResult ProductSearchResult()
+        {
+            ViewBag.Message = "Resultado de Búsqueda de Productos";
+
+            return View();
+        }
+
+        public JsonResult ProductSearchQueryResult()
+        {
+            List<ProductModel> products = new List<ProductModel>();
+            for (int i = 1; i < 10; i++)
+                products.Add(new ProductModel()
+                {
+                    ProductId = i,
+                    ProductName = string.Format("Product-{0}", i),
+                    Logo = string.Format("Logo-{0}", i),
+                    File = string.Format("File-{0}", i),
+                    Program = string.Format("Program-{0}", i)
+                });
+
+            return Json(products, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Content()
+        {
+            ViewBag.Message = "Ingreso de Contenido";
+
+            return View();
+        }
+
+        public ActionResult Supplier()
+        {
+            ViewBag.Message = "Ingreso de Proveedores";
+
+            return View();
+        }
+
+        [Authorize(Roles = "Plus")]
+        public ActionResult Administration()
+        {
+            ViewBag.Message = "Administración del Portal";
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Contáctenos";
 
             return View();
+        }
+
+        //Test knockout
+        public ActionResult SaveProducts(List<ProductModel> products)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,0 +1,85 @@
+﻿@model Materials.Web.Models.ProductModel
+@{
+    ViewBag.Title = "Resultado de la búsqueda de productos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        /// Aaron: for setting the jqGrid width
+        var newWidth = $("#tbSearch").width() - 40,
+            /// for setting add and edit windows dimensions
+            newTop = $(document).height() / 3; productId
+        newLeft = $(document).height() / 2;
+
+        /// Aaron: pointer to the current jqGrid
+        var myGrid = $("#search_view"),
+            lastSel = -1,
+            inEdit;
+        /// Aaron: Metadata and data source and all parameters definition
+        myGrid.jqGrid({
+            url: '@Url.Action("ProductSearchQueryResult", "Home")',
+            datatype: "json",
+            height: 'auto',
+            width: newWidth,
+            colNames: ['ProductId', 'Logo', 'Nombre', 'Ficha', 'Programa'],
+            colModel: [
+                 { name: 'ProductId', index: 'ProductId', width: 10, sorttype: "string", editable: false, hidden: true, editrules: { edithidden: true } },
+                 { name: 'Logo', index: 'Logo', width: 50, sorttype: "string", editable: true, editoptions: { readonly: 'readonly' } },
+                 { name: 'ProductName', index: 'ProductName', width: 80, sorttype: "string", editable: true, editoptions: { readonly: 'readonly' } },
+                 { name: 'File', index: 'File', width: 80, sorttype: "string", editable: true, editoptions: { readonly: 'readonly' } },
+                 { name: 'Program', index: 'Program', width: 80, sorttype: "string", editable: true, editoptions: { readonly: 'readonly' } }
+
+            ],
+            pager: '#search_viewPager',
+            gridview: true,
+            ignoreCase: true,
+            rownumbers: true,
+            rowNum: 8,
+            loadonce: false,
+            viewrecords: true,
+            navigator: true,
+            pagerpos: 'center',
+            caption: "Resultado de la búsqueda",
+
+            onSelectRow: function (id) {
+
+            },
+
+            loadComplete: function () {
+
+            }
+        });
+
+        myGrid.jqGrid('navGrid', '#search_viewPager',
+         {
+             // Navigation buttons appearance
+             add: false,
+             edit: false,
+             del: false,
+             search: false,
+             refresh: false
+         }
+         );
+    });
+</script>
+
+<h2>@ViewBag.Title</h2>
+    <table id="search_view">
+    </table>
+    <div id="search_viewPager"></div>
+
+ <table  id="tbSearch">
+        <tr>
+            <td>
+                <img width="257" height="120" src="~/Images/home.jpg" />
+            </td>
+            <td>
+                <img width="257" height="120" src="~/Images/home.jpg" />
+            </td>
+            <td>
+                <img width="257" height="120" src="~/Images/home.jpg" />
+            </td>
+        </tr>
+</table>

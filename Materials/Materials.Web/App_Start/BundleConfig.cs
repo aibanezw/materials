@@ -9,10 +9,10 @@ namespace Materials.Web
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
-                        "~/Scripts/jquery-ui-{version}.js"));
+                        "~/Scripts/jquery-{version}.js", 
+                        "~/Scripts/jquery-ui-{version}.js",
+                        "~/Scripts/i18n/grid.locale-es.js",
+                        "~/Scripts/jquery.jqGrid*"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.unobtrusive*",
@@ -38,6 +38,13 @@ namespace Materials.Web
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+            bundles.Add(new StyleBundle("~/Content/themes/jquery").Include(
+                        "~/Content/themes/base/jquery-ui.css",
+                        "~/Content/jquery.jqGrid/ui.jqgrid.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
+                        "~/Scripts/knockout-{version}.debug.js"));
         }
     }
 }
